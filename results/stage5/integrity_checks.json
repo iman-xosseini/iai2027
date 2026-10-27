@@ -1,0 +1,129 @@
+{
+  "checkpoints": {
+    "9 checkpoints, unique paths and hashes": true,
+    "model key and seed match the file": true,
+    "selected epochs as recorded in Stage 4": true,
+    "36,224 parameters, latent 32, history 4, horizon 1": true,
+    "all weights finite": true,
+    "mask policy matches model identity (A/B ones, C mask)": true,
+    "all models in evaluation mode": true
+  },
+  "data": {
+    "21,500 windows": true,
+    "100 machines": true,
+    "tensor shapes [N,4,6,4] / [N,6,4]": true,
+    "no label fields in the window tensors": true,
+    "stored masks all ones": true,
+    "24 h context": true,
+    "target directly follows the context": true,
+    "6 h target": true,
+    "chronological within each machine": true,
+    "no window of another partition overlaps the evaluation period": true,
+    "sample ids disjoint from other partitions": true,
+    "metadata order = tensor order": true,
+    "scaler fitted on exactly the training-period rows": true,
+    "300 sample windows reproduced from raw telemetry with the training scaler": true,
+    "validation outputs reproduce Stage 4 (MSE and thresholds)": true
+  },
+  "scaler_max_abs_difference": 1.9944848261843617e-07,
+  "protocol_tests": {
+    "test_alarm_incidents_cooldown": true,
+    "test_alarm_windows_and_incidents_are_different_units": true,
+    "test_bootstrap_resamples_whole_machines": true,
+    "test_checkpoints_load_and_evaluation_changes_nothing": true,
+    "test_clean_paired_policy_and_target_preservation_on_test": true,
+    "test_detection_and_earliest_lead": true,
+    "test_episode_gap_merges_close_events": true,
+    "test_event_grouping_counts_multicomponent_failures_once": true,
+    "test_freeze_protocol_detects_changes_and_guards_outputs": true,
+    "test_ineligible_when_horizon_not_observed": true,
+    "test_lead_time_causality": true,
+    "test_one_window_credits_one_episode": true,
+    "test_relative_degradation_uses_own_clean_mse": true,
+    "test_test_windows_are_isolated_from_training_inputs": true,
+    "test_threshold_uses_only_given_calibration_scores": true
+  },
+  "regression_vs_stage4": [
+    {
+      "model": "A",
+      "seed": 11,
+      "val clean MSE (Stage 4)": 0.6817911863327026,
+      "val clean MSE (now)": 0.6817911705910233,
+      "threshold (Stage 4)": 5.780554294586182,
+      "threshold (now)": 5.780554083999999,
+      "max |difference|": 2.1058618226987846e-07
+    },
+    {
+      "model": "A",
+      "seed": 22,
+      "val clean MSE (Stage 4)": 0.6714997291564941,
+      "val clean MSE (now)": 0.6714997551514092,
+      "threshold (Stage 4)": 5.757658958435059,
+      "threshold (now)": 5.757658908499999,
+      "max |difference|": 4.993505964279166e-08
+    },
+    {
+      "model": "A",
+      "seed": 33,
+      "val clean MSE (Stage 4)": 0.6767608523368835,
+      "val clean MSE (now)": 0.6767608688518512,
+      "threshold (Stage 4)": 5.73652458190918,
+      "threshold (now)": 5.736524415999999,
+      "max |difference|": 1.6590918061609727e-07
+    },
+    {
+      "model": "B",
+      "seed": 11,
+      "val clean MSE (Stage 4)": 0.6100517511367798,
+      "val clean MSE (now)": 0.6100517894684178,
+      "threshold (Stage 4)": 6.303485870361328,
+      "threshold (now)": 6.303485987499999,
+      "max |difference|": 1.1713867120732857e-07
+    },
+    {
+      "model": "B",
+      "seed": 22,
+      "val clean MSE (Stage 4)": 0.5850232839584351,
+      "val clean MSE (now)": 0.5850233095037684,
+      "threshold (Stage 4)": 6.06190824508667,
+      "threshold (now)": 6.0619081994999995,
+      "max |difference|": 4.558667043852438e-08
+    },
+    {
+      "model": "B",
+      "seed": 33,
+      "val clean MSE (Stage 4)": 0.5938663482666016,
+      "val clean MSE (now)": 0.593866329408105,
+      "threshold (Stage 4)": 6.155651092529297,
+      "threshold (now)": 6.155650902,
+      "max |difference|": 1.9052929722818135e-07
+    },
+    {
+      "model": "C",
+      "seed": 11,
+      "val clean MSE (Stage 4)": 0.4178158640861511,
+      "val clean MSE (now)": 0.4178158675757423,
+      "threshold (Stage 4)": 4.616016387939453,
+      "threshold (now)": 4.6160166285,
+      "max |difference|": 2.4056054659382653e-07
+    },
+    {
+      "model": "C",
+      "seed": 22,
+      "val clean MSE (Stage 4)": 0.4160270690917969,
+      "val clean MSE (now)": 0.4160270688575256,
+      "threshold (Stage 4)": 4.647527694702148,
+      "threshold (now)": 4.6475275515,
+      "max |difference|": 1.4320214880569893e-07
+    },
+    {
+      "model": "C",
+      "seed": 33,
+      "val clean MSE (Stage 4)": 0.5417912602424622,
+      "val clean MSE (now)": 0.5417912603355721,
+      "threshold (Stage 4)": 5.448461055755615,
+      "threshold (now)": 5.448461082499999,
+      "max |difference|": 2.67443835966219e-08
+    }
+  ]
+}

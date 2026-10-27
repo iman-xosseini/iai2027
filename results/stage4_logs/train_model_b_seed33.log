@@ -1,0 +1,35 @@
+<frozen runpy>:130: RuntimeWarning: 'src.training.robust' found in sys.modules after import of package 'src.training', but prior to execution of 'src.training.robust'; this may result in unpredictable behaviour
+--- Model B, seed 33, 1 threads ------------------------------------------------------------
+epoch  0 | untrained                                       | val total 5.2072 (pred 0.0120, SIGReg 51.952) | objective 5.2099 | eff. rank 13.2, min std 0.026 |   0 s
+epoch  1 | train total 1.3573 (pred 0.7098, SIGReg 6.475) | val total 1.0443 (pred 0.7204, SIGReg 3.240) | objective 1.1148 | eff. rank 13.8, min std 0.591 | 315 s
+epoch  2 | train total 1.0720 (pred 0.7283, SIGReg 3.437) | val total 1.0093 (pred 0.7197, SIGReg 2.896) | objective 1.0644 | eff. rank 16.8, min std 0.688 | 366 s  <- best
+epoch  3 | train total 1.0303 (pred 0.7161, SIGReg 3.142) | val total 0.9777 (pred 0.7055, SIGReg 2.722) | objective 1.0183 | eff. rank 19.1, min std 0.679 | 389 s  <- best
+epoch  4 | train total 0.9983 (pred 0.7013, SIGReg 2.971) | val total 0.9715 (pred 0.6733, SIGReg 2.981) | objective 0.9999 | eff. rank 20.0, min std 0.643 | 321 s  <- best
+epoch  5 | train total 0.9692 (pred 0.6804, SIGReg 2.888) | val total 0.9848 (pred 0.6657, SIGReg 3.191) | objective 0.9890 | eff. rank 21.2, min std 0.643 | 309 s  <- best
+epoch  6 | train total 0.9433 (pred 0.6658, SIGReg 2.775) | val total 0.9987 (pred 0.6197, SIGReg 3.790) | objective 0.9676 | eff. rank 22.7, min std 0.626 | 301 s  <- best
+epoch  7 | train total 0.9231 (pred 0.6566, SIGReg 2.665) | val total 0.9872 (pred 0.6275, SIGReg 3.597) | objective 0.9459 | eff. rank 24.5, min std 0.645 | 310 s  <- best
+epoch  8 | train total 0.9057 (pred 0.6509, SIGReg 2.548) | val total 0.9746 (pred 0.6289, SIGReg 3.458) | objective 0.9297 | eff. rank 25.8, min std 0.672 | 313 s  <- best
+epoch  9 | train total 0.8923 (pred 0.6466, SIGReg 2.456) | val total 0.9788 (pred 0.6190, SIGReg 3.598) | objective 0.9254 | eff. rank 27.4, min std 0.686 | 301 s  <- best
+epoch 10 | train total 0.8809 (pred 0.6431, SIGReg 2.378) | val total 0.9592 (pred 0.6312, SIGReg 3.280) | objective 0.9127 | eff. rank 27.7, min std 0.720 | 329 s  <- best
+epoch 11 | train total 0.8737 (pred 0.6405, SIGReg 2.332) | val total 0.9609 (pred 0.6262, SIGReg 3.347) | objective 0.9064 | eff. rank 28.6, min std 0.740 | 310 s  <- best
+epoch 12 | train total 0.8687 (pred 0.6378, SIGReg 2.309) | val total 0.9611 (pred 0.6222, SIGReg 3.388) | objective 0.9031 | eff. rank 28.8, min std 0.772 | 304 s  <- best
+epoch 13 | train total 0.8639 (pred 0.6349, SIGReg 2.291) | val total 0.9503 (pred 0.6325, SIGReg 3.178) | objective 0.8935 | eff. rank 28.7, min std 0.787 | 313 s  <- best
+epoch 14 | train total 0.8587 (pred 0.6310, SIGReg 2.278) | val total 0.9657 (pred 0.6077, SIGReg 3.580) | objective 0.8973 | eff. rank 28.5, min std 0.770 | 317 s
+epoch 15 | train total 0.8555 (pred 0.6281, SIGReg 2.274) | val total 0.9608 (pred 0.6274, SIGReg 3.335) | objective 0.8994 | eff. rank 29.3, min std 0.783 | 325 s
+epoch 16 | train total 0.8525 (pred 0.6258, SIGReg 2.267) | val total 0.9557 (pred 0.6242, SIGReg 3.315) | objective 0.8917 | eff. rank 29.2, min std 0.788 | 332 s  <- best
+epoch 17 | train total 0.8496 (pred 0.6228, SIGReg 2.268) | val total 0.9685 (pred 0.6037, SIGReg 3.647) | objective 0.8899 | eff. rank 29.2, min std 0.770 | 339 s  <- best
+epoch 18 | train total 0.8465 (pred 0.6202, SIGReg 2.263) | val total 0.9745 (pred 0.5932, SIGReg 3.813) | objective 0.8923 | eff. rank 28.7, min std 0.751 | 334 s
+epoch 19 | train total 0.8426 (pred 0.6167, SIGReg 2.259) | val total 0.9686 (pred 0.6064, SIGReg 3.622) | objective 0.8903 | eff. rank 29.2, min std 0.766 | 331 s
+epoch 20 | train total 0.8405 (pred 0.6138, SIGReg 2.268) | val total 0.9786 (pred 0.5858, SIGReg 3.927) | objective 0.8893 | eff. rank 29.0, min std 0.741 | 319 s  <- best
+epoch 21 | train total 0.8363 (pred 0.6101, SIGReg 2.262) | val total 0.9585 (pred 0.6254, SIGReg 3.331) | objective 0.8899 | eff. rank 29.8, min std 0.800 | 335 s
+epoch 22 | train total 0.8324 (pred 0.6065, SIGReg 2.259) | val total 0.9724 (pred 0.6021, SIGReg 3.703) | objective 0.8912 | eff. rank 29.1, min std 0.761 | 313 s
+epoch 23 | train total 0.8302 (pred 0.6036, SIGReg 2.266) | val total 0.9821 (pred 0.5889, SIGReg 3.932) | objective 0.8896 | eff. rank 29.4, min std 0.756 | 323 s
+epoch 24 | train total 0.8271 (pred 0.5999, SIGReg 2.272) | val total 0.9756 (pred 0.5939, SIGReg 3.817) | objective 0.8871 | eff. rank 28.9, min std 0.758 | 311 s  <- best
+epoch 25 | train total 0.8227 (pred 0.5957, SIGReg 2.270) | val total 0.9776 (pred 0.5912, SIGReg 3.864) | objective 0.8872 | eff. rank 28.9, min std 0.761 | 312 s
+epoch 26 | train total 0.8203 (pred 0.5926, SIGReg 2.277) | val total 0.9836 (pred 0.5961, SIGReg 3.874) | objective 0.8954 | eff. rank 29.2, min std 0.773 | 314 s
+epoch 27 | train total 0.8177 (pred 0.5886, SIGReg 2.290) | val total 1.0107 (pred 0.5611, SIGReg 4.496) | objective 0.8941 | eff. rank 29.1, min std 0.742 | 344 s
+epoch 28 | train total 0.8159 (pred 0.5865, SIGReg 2.294) | val total 0.9908 (pred 0.5838, SIGReg 4.070) | objective 0.8948 | eff. rank 29.2, min std 0.762 | 324 s
+epoch 29 | train total 0.8109 (pred 0.5822, SIGReg 2.288) | val total 1.0110 (pred 0.5634, SIGReg 4.476) | objective 0.9022 | eff. rank 29.1, min std 0.731 | 323 s
+epoch 30 | train total 0.8077 (pred 0.5781, SIGReg 2.297) | val total 1.0162 (pred 0.5539, SIGReg 4.623) | objective 0.8983 | eff. rank 29.5, min std 0.719 | 331 s
+Saved epoch 24 to C:\Users\Iman\Desktop\IAI2027 Study\SourceCode\checkpoints\model_b_best_seed33.pt
+Model B, seed 33: selected epoch 24 in 162.4 min

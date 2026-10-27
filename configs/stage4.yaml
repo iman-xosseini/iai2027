@@ -1,0 +1,56 @@
+# configs/stage4.yaml
+# Stage 4 experiment configuration: historical telemetry dropouts, Models A/B/C.
+# Linked to configs/base.yaml (architecture, optimizer, SIGReg and non-collapse criteria are taken from there).
+# Every value below was fixed BEFORE training Models B/C and before any robustness evaluation.
+
+models:
+  A: {checkpoint: "checkpoints/model_a_best_seed{seed}.pt", train: false, input_mask: "ones"}  # Stage 3, clean training
+  B: {checkpoint: "checkpoints/model_b_best_seed{seed}.pt", train: true, input_mask: "ones"}   # corruption-augmented
+  C: {checkpoint: "checkpoints/model_c_best_seed{seed}.pt", train: true, input_mask: "mask"}   # mask-aware
+
+fill_value: 0.0  # Removed standardized readings are replaced by 0 (the training-set mean after Stage 1 scaling)
+
+training_corruption:
+  pattern: "independent"         # Primary training corruption; bursts and outages are held out
+  clean_fraction: 0.5            # Exactly half of every training batch keeps a clean context
+  rates: [0.1, 0.2, 0.4]         # Severity of a corrupted window, drawn uniformly
+  stream_seed: 4001              # Corruption RNG stream, combined with the run seed via numpy SeedSequence
+
+selection:
+  # Checkpoint objective for B and C: weighted validation total losses (clean + fixed corrupted validation set)
+  weights: {clean: 0.5, corrupted: 0.5}
+  corrupted_val_rates: [0.1, 0.2, 0.4]  # Per-window severity of the fixed validation corruption set
+  corrupted_val_seed: 4101              # Fixed: identical validation corruption for every model and epoch
+
+evaluation:
+  # Machine x hour x sensor availability schedules on the validation timeline (overlapping windows agree).
+  # Prediction targets are always kept clean (controlled evaluation assumption).
+  scenario_seed: 4201
+  scenarios:
+    clean:         {pattern: "independent", rate: 0.0}
+    independent_10: {pattern: "independent", rate: 0.1}
+    independent_20: {pattern: "independent", rate: 0.2}
+    independent_40: {pattern: "independent", rate: 0.4}
+    burst_6h:      {pattern: "burst", duration_hours: 6, cycle_hours: 30}    # one burst, random start hour and sensor, per 30 h
+    burst_12h:     {pattern: "burst", duration_hours: 12, cycle_hours: 30}
+    outage:        {pattern: "outage", blocks: [1, 2], cycle_blocks: 5}      # one sensor, 1 or 2 aligned 6 h blocks, per 30 h
+  bootstrap: {replicates: 2000, seed: 4301, unit: "machine"}  # Machine-level resampling for B-vs-C uncertainty
+
+alerts:
+  surprise: "euclidean distance between predicted and actual target embeddings"
+  calibration: "clean validation windows"
+  percentile: 95
+  # Failure-negative proxy subset (labels used ONLY to select evaluation windows, never for training or thresholds).
+  # A validation window is a proxy-normal window if
+  #   no failure of its machine lies in [context_start - 48 h, target_end + 48 h], and
+  #   no maintenance of its machine lies in [context_start - 24 h, target_end].
+  proxy_normal:
+    failure_before_hours: 48
+    failure_after_hours: 48
+    maintenance_before_hours: 24
+    maintenance_after_hours: 0
+
+temporal_checks:
+  seed: 4401
+  order_perturbations: ["reversed", "shuffled"]  # Reorder the four historical blocks; target unchanged
+  mismatch_min_separation_windows: 20             # Same machine, >= 20 windows (120 h) apart: no overlap with the target

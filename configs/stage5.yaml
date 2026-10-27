@@ -1,0 +1,98 @@
+# configs/stage5.yaml
+# Stage 5 frozen protocol: final held-out evaluation of Models A, B and C (evaluation only).
+# Written and hashed (results/stage5/protocol_manifest.json) BEFORE any test prediction is computed.
+# Linked to configs/base.yaml (architecture) and configs/stage4.yaml (scenario definitions, mask policies,
+# proxy-normal rule), which are used unchanged.
+
+protocol:
+  version: 1
+  written: "2026-10-27"
+  evaluation_only: true                 # no training epochs, no optimizer, checkpoints never modified
+  inference: "model.eval() and torch.inference_mode()"
+  amendments: []                        # corrections after freezing are logged here and in the manifest
+
+models:
+  keys: [A, B, C]
+  seeds: [11, 22, 33]                   # all seeds, including Model C seed 33 (selected epoch 3)
+  checkpoint: "checkpoints/model_{key}_best_seed{seed}.pt"   # {key} in lower case
+  expected_selected_epochs: {A: [16, 20, 21], B: [26, 21, 24], C: [26, 22, 3]}
+  expected_parameters: 36224
+  input_mask: {A: "ones", B: "ones", C: "mask"}   # A/B all-ones history mask; C actual availability
+
+data:
+  evaluation_partition: "test"          # final metrics only
+  calibration_partition: "val"          # thresholds only
+  expected_windows: 21500
+  expected_machines: 100
+  target: "always the clean recorded block, target mask all ones"
+
+corruption:
+  scenario_definitions: "configs/stage4.yaml: evaluation.scenarios (unchanged)"
+  scenarios: [clean, independent_10, independent_20, independent_40, burst_6h, burst_12h, outage]
+  independent: [independent_10, independent_20, independent_40]
+  held_out_patterns: [burst_6h, burst_12h, outage]
+  scenario_seed: 5201                   # test schedules; independent of the validation seed 4201
+
+scores:
+  window_mse: "mean over the 32 latent dimensions of (z_pred - z_target)^2"
+  surprise: "||z_pred - z_target||_2"
+  relative_degradation: "D = mean window MSE (scenario) / mean window MSE (clean) - 1, same model and seed"
+  normalized_clean_mse: "clean MSE / mean per-dimension variance of the model's own test target embeddings"
+
+alerts:
+  threshold: "per model and seed: 95th percentile (numpy linear interpolation) of clean VALIDATION surprise"
+  percentile: 95
+  proxy_normal: "configs/stage4.yaml alerts.proxy_normal (failure in [cs-48h, te+48h] or maintenance in [cs-24h, te] excluded)"
+  excess_alert_fraction: "corrupted test alert rate - clean test alert rate, percentage points"
+  machine_day: "4 windows (6 h stride) = 1 machine-day of monitored target blocks"
+  incident_cooldown_hours: 24           # a flagged window starts a new incident unless the same machine had a
+                                        # flagged window with alarm time in the preceding 24 h
+
+comparisons:
+  primary: "B - C"                      # D_B - D_C > 0 favours C; < 0 favours B
+  secondary: ["A - B", "A - C"]         # benefit of corruption augmentation over clean training
+  primary_contrasts:
+    - "independent_40"
+    - "trajectory: mean over independent_10, independent_20, independent_40"
+  exploratory: "independent_10, independent_20 individually; burst_6h, burst_12h, outage; alerts beyond the primary contrasts"
+
+uncertainty:
+  bootstrap: {replicates: 2000, seed: 5301, unit: "machine", interval: "95% percentile", paired: true}
+  seeds: "per-seed values and mean +- sample SD (ddof = 1), reported separately from bootstrap intervals"
+
+failure_events:
+  status: "exploratory, secondary to the robustness comparison"
+  source: "data/processed/failure_events.csv (partition == evaluation partition)"
+  event_key: [machine_id, datetime]     # several failed components at one timestamp = one event
+  episode_gap_hours: 24                 # events of a machine < 24 h after its previous event join that episode
+  alarm_time: "target_end + availability offset (the score needs the observed target block)"
+  availability_offset_hours: {primary: 0, sensitivity: 1}   # 1 h if hourly readings label the interval start
+  horizon_hours: {primary: 24, secondary: 48}
+  warning_rule: "0 < f - alarm_time <= horizon"
+  matching: "each window is credited only to the first episode of its machine that follows its alarm time within the horizon; an episode is detected if >= 1 credited window exceeds the threshold; lead = f - earliest such alarm time"
+  eligibility: "all horizon/6 window slots with alarm time in [f - horizon, f) exist in the evaluation partition"
+  scenarios: "clean primary; corrupted scenarios secondary"
+  chance_control: "rate-matched: 1 - (1 - q)^(horizon/6), q = the model-seed clean window alert rate on the evaluation partition"
+
+diagnostics:
+  implicit_zero_cue: "count exact zeros in standardized train and validation context readings"
+  supplementary_seed_subset: [11, 22]   # supplementary only; never replaces the three-seed results
+
+claim_rules:
+  augmentation_improves_robustness: >-
+    D_A - D_B > 0 and D_A - D_C > 0 at independent_40, each in all 3 seeds and with a machine-bootstrap
+    95% interval excluding 0
+  mask_improves_on_augmentation: >-
+    D_B - D_C > 0 at independent_40 AND for the 10/20/40 trajectory, each in all 3 seeds with a
+    machine-bootstrap 95% interval excluding 0, and the excess-alert difference B - C not significantly < 0
+  early_failure_warning: >-
+    for a model, clean 24 h episode recall exceeds its rate-matched chance level in all 3 seeds and the
+    pre-failure window alert rate exceeds the proxy-normal alert rate in all 3 seeds; numerical claims only
+    with >= 30 eligible episodes, and always as an exploratory association
+  noncollapse: "describe as non-collapsed by the predefined Stage 3/4 criteria; no physical semantics"
+
+outputs:
+  results_dir: "results/stage5"
+  figures_dir: "figures/stage5"
+  per_window_scores: "results/stage5/per_window_scores.csv.gz"   # pyarrow unavailable: compressed CSV
+  predictions_dir: "results/stage5/predictions"                  # z_pred / z_target per model and seed

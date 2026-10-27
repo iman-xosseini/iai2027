@@ -1,0 +1,3 @@
+# The Stage 5 protocol is verified byte for byte against the SHA-256 in results/stage5/protocol_manifest.json,
+# so the config files must keep LF line endings on every checkout (also on Windows with core.autocrlf).
+configs/*.yaml text eol=lf

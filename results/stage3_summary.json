@@ -1,0 +1,172 @@
+{
+  "stage": 3,
+  "model": "Model A: standard temporal LeWorldModel (clean windows, all-ones masks)",
+  "data": {
+    "train_windows": 101800,
+    "val_windows": 21500,
+    "partitions_used": [
+      "train",
+      "val"
+    ],
+    "test_partition_used": false,
+    "artificial_corruption": false,
+    "failure_or_maintenance_labels_used": false
+  },
+  "architecture": {
+    "encoder": "48 -> [64, 64] -> 32, GELU",
+    "predictor": "128 -> [128, 64] -> 32, GELU",
+    "parameters": 36224
+  },
+  "hyperparameters": {
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "batch_size": 128,
+    "max_epochs": 30,
+    "sigreg_weight": 0.1,
+    "sigreg_num_proj": 1024,
+    "sigreg_knots": 17,
+    "sigreg_t_max": 3.0,
+    "sigreg_val_projection_seed": 2027,
+    "diagnostics_subset_size": 4096,
+    "diagnostics_tracked_windows": 6,
+    "diagnostics_min_effective_rank": 16,
+    "diagnostics_min_latent_std": 0.1,
+    "device": "cpu",
+    "torch_threads": 8,
+    "torch_version": "2.14.1+cpu"
+  },
+  "objective": "prediction_loss (MSE, mean over batch and 32 dims) + sigreg_weight * SIGReg([5, B, 32])",
+  "sigreg": {
+    "num_proj": 1024,
+    "knots": 17,
+    "t_max": 3.0,
+    "integration": "trapezoid on [0, t_max], doubled by symmetry",
+    "weight": "exp(-t^2/2)",
+    "scaling": "N * weighted integral, mean over projections and time positions",
+    "null_expectation_quadrature": 1.0524641275405884,
+    "null_expectation_exact": 1.059425765514465
+  },
+  "noncollapse_criteria": {
+    "min_effective_rank": 16,
+    "min_latent_std": 0.1
+  },
+  "selection_rule": "lowest validation total loss among epochs passing the non-collapse checks",
+  "benchmark": {
+    "ms_per_step": {
+      "0 (prediction loss only)": 7.97,
+      "64": 10.68,
+      "256": 20.52,
+      "1024": 70.1
+    },
+    "seconds_per_full_epoch": 59.03417629993055
+  },
+  "seeds": {
+    "11": {
+      "checkpoint": "checkpoints/model_a_best_seed11.pt",
+      "selected_epoch": 16,
+      "val_metrics": {
+        "val_prediction_loss": 0.6817911657843478,
+        "val_sigreg_loss": 2.250505816881047,
+        "val_weighted_sigreg_loss": 0.22505058459625688,
+        "val_total_loss": 0.9068417532166769
+      },
+      "train_time_s": 1776.7156716999598,
+      "latent_statistics": {
+        "latent_mean_abs": 0.027641731392154867,
+        "latent_std_min": 0.803103524746395,
+        "latent_std_median": 0.8846288974275316,
+        "latent_std_max": 1.071548561805325,
+        "effective_rank": 28.86725473970404,
+        "max_abs_correlation": 0.2907651250974999
+      },
+      "persistence": {
+        "temporal predictor MSE": 0.6817911267280579,
+        "persistence MSE": 1.2932032346725464,
+        "training-mean MSE": 0.8027669191360474,
+        "improvement over persistence": 0.47278887923544743,
+        "improvement over training mean": 0.15069852721159194,
+        "windows where predictor beats persistence": 0.9568837285041809
+      }
+    },
+    "22": {
+      "checkpoint": "checkpoints/model_a_best_seed22.pt",
+      "selected_epoch": 20,
+      "val_metrics": {
+        "val_prediction_loss": 0.6714997526324072,
+        "val_sigreg_loss": 2.3929740184517794,
+        "val_weighted_sigreg_loss": 0.23929740558668625,
+        "val_total_loss": 0.9107971597272296
+      },
+      "train_time_s": 1664.9684490998043,
+      "latent_statistics": {
+        "latent_mean_abs": 0.038032310235152966,
+        "latent_std_min": 0.8134125020206916,
+        "latent_std_median": 0.8617663999891103,
+        "latent_std_max": 1.0376624769830973,
+        "effective_rank": 28.740559857952917,
+        "max_abs_correlation": 0.3210996497145958
+      },
+      "persistence": {
+        "temporal predictor MSE": 0.6714997291564941,
+        "persistence MSE": 1.2652068138122559,
+        "training-mean MSE": 0.7917242050170898,
+        "improvement over persistence": 0.46925694532645945,
+        "improvement over training mean": 0.1518514592565735,
+        "windows where predictor beats persistence": 0.9509302377700806
+      }
+    },
+    "33": {
+      "checkpoint": "checkpoints/model_a_best_seed33.pt",
+      "selected_epoch": 21,
+      "val_metrics": {
+        "val_prediction_loss": 0.6767608656328777,
+        "val_sigreg_loss": 2.333983948995901,
+        "val_weighted_sigreg_loss": 0.23339839740132176,
+        "val_total_loss": 0.910159265074619
+      },
+      "train_time_s": 1635.7051484001568,
+      "latent_statistics": {
+        "latent_mean_abs": 0.03502013986326391,
+        "latent_std_min": 0.7962139511161045,
+        "latent_std_median": 0.878518397086596,
+        "latent_std_max": 1.0311328023404556,
+        "effective_rank": 28.712810436646922,
+        "max_abs_correlation": 0.30529853221467446
+      },
+      "persistence": {
+        "temporal predictor MSE": 0.6767609119415283,
+        "persistence MSE": 1.277954339981079,
+        "training-mean MSE": 0.7996432781219482,
+        "improvement over persistence": 0.47043420037092387,
+        "improvement over training mean": 0.15367148019929955,
+        "windows where predictor beats persistence": 0.9506046772003174
+      }
+    }
+  },
+  "aggregate_over_seeds": {
+    "prediction_loss": {
+      "mean": 0.6766839280165442,
+      "std": 0.005146137941562516
+    },
+    "sigreg_loss": {
+      "mean": 2.325821261442909,
+      "std": 0.07158400111593058
+    },
+    "weighted_sigreg_loss": {
+      "mean": 0.23258212919475496,
+      "std": 0.007158400479305664
+    },
+    "total_loss": {
+      "mean": 0.9092660593395085,
+      "std": 0.0021235989569258007
+    },
+    "effective_rank": {
+      "mean": 28.773541678101292,
+      "std": 0.08233535711906932
+    },
+    "improvement_over_persistence": {
+      "mean": 0.47082667497761027,
+      "std": 0.0017983788594272915
+    }
+  }
+}

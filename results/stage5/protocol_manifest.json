@@ -1,0 +1,21 @@
+{
+  "config": "C:/Users/Iman/Desktop/IAI2027 Study/SourceCode/configs/stage5.yaml",
+  "sha256": "46c105e49c34108bb1d43b0fbfece4648d7281fd720f12215f1b3c097620fbe5",
+  "frozen_at": "2026-10-27T15:22:53+00:00",
+  "test_outputs_existed_at_freeze": false,
+  "amendments": [],
+  "base_config_sha256": "58d060438d250848422d220ff2a651d76c8ac4133a695817039a0c0dcfa8bcfe",
+  "stage4_config_sha256": "c58259f8afd19215f5d2c5673de311cffc01e3fbc44335128c08dc84155165a8",
+  "evaluation_partition": "test",
+  "calibration_partition": "val",
+  "caveat": "Stage 1 exploratory plots covered the full period, including test.",
+  "post_hoc_analyses": [
+    {
+      "added": "2026-10-27T15:28:22+00:00",
+      "test_results_inspected_before": true,
+      "protocol_changed": false,
+      "section": "9.8 post-hoc analysis",
+      "description": "alert fraction by hours before failure; raw telemetry around failures; 48 h recall by component; figure F5"
+    }
+  ]
+}

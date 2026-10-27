@@ -1,0 +1,4 @@
+partition,start,end_exclusive,days,machines,hourly_rows,complete_blocks,runs,windows,hours_in_windows_frac,hours_as_target_frac,failures,failures_comp1,failures_comp2,failures_comp3,failures_comp4,failures_after_first_24h,machines_with_failure,maintenance_events,error_events
+train,2015-01-01 06:00:00,2015-09-13 18:00:00,255.5,100,613200,102200,100,101800,1.0,0.9960861056751468,555,148,182,96,129,537,98,2020,2760
+val,2015-09-13 18:00:00,2015-11-07 12:00:00,54.75,100,131400,21900,100,21500,1.0,0.9817351598173516,98,19,34,18,27,95,69,430,596
+test,2015-11-07 12:00:00,2016-01-01 06:00:00,54.75,100,131400,21900,100,21500,1.0,0.9817351598173516,108,25,43,17,23,108,70,429,563

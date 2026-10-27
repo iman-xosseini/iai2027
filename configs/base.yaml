@@ -1,0 +1,64 @@
+# configs/base.yaml
+# Starting values for experimentation, not final hyperparameters.
+# Shared architecture for Models A, B, and C.
+
+data:
+  num_sensors: 4
+  sensor_names:
+    - voltage
+    - rotation
+    - pressure
+    - vibration
+
+  sampling_interval: "1 hour"
+  block_size: 6          # Hourly observations per block
+  context_length: 4     # Historical blocks per sample
+  prediction_horizon: 1 # Future blocks to predict
+
+model:
+  latent_dim: 32
+
+  encoder_type: "MLP"
+  encoder_input_dim: 48  # 24 sensor values + 24 availability-mask entries per block
+  encoder_hidden_dims: [64, 64]  # Initial engineering choice (Stage 2), GELU after each
+  encoder_output_dim: 32
+
+  predictor_type: "MLP"
+  predictor_input_dim: 128  # 4 historical latent vectors x 32 dimensions
+  predictor_hidden_dims: [128, 64]  # Initial engineering choice (Stage 2), GELU after each
+  predictor_output_dim: 32
+
+  use_sigreg: true
+
+training:
+  optimizer: "Adam"
+  learning_rate: 0.001
+
+  batch_size:
+    synthetic: 32
+    azure: 128
+
+  max_epochs: 30
+  sigreg_weight: 0.1  # LeWorldModel lambda; valid for the N-scaled Epps-Pulley statistic below (not the CIRP variant)
+  random_seeds: [11, 22, 33]
+  device: "auto"  # CUDA when available, otherwise CPU
+
+  sigreg:  # Epps-Pulley SIGReg as in LeWorldModel (module.SIGReg)
+    num_proj: 1024            # LeWM reference; ~70 ms per training step on CPU (Stage 3 benchmark)
+    knots: 17                 # Trapezoid nodes on [0, t_max]
+    t_max: 3.0
+    val_projection_seed: 2027  # Same validation batches and projection directions at every epoch
+
+  diagnostics:  # Fixed before training; used for checkpoint selection
+    subset_size: 4096          # Validation windows used for latent statistics
+    tracked_windows: 6         # Held-out windows whose prediction error is logged every epoch
+    min_effective_rank: 16     # Non-collapse: at least half of the 32 latent directions in use
+    min_latent_std: 0.1        # Non-collapse: every latent dimension keeps a spread (SIGReg target: 1)
+
+# To be specified in a linked experiment configuration before training:
+# - Model A/B/C selection and training corruption rules
+# - Dropout patterns and rates; transient-disturbance types and magnitudes
+# - Zero fill after training-set normalization; train-time clean/corrupt ratio
+# - Corruption RNG seed(s) and pre-generated evaluation corruption files
+# - Evaluation masks: A/B all ones; C actual availability mask
+# - Clean future target for all three models

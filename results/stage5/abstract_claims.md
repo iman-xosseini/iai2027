@@ -1,0 +1,11 @@
+# Stage 5 abstract evidence ledger
+
+Claim rules are frozen in `configs/stage5.yaml` (sha256 `46c105e49c34108bb1d43b0fbfece4648d7281fd720f12215f1b3c097620fbe5`) and applied mechanically in notebook 05, Section 9.9.
+
+| Proposed claim | Quantitative evidence | Partition | Can we state it? | Required limitation |
+|---|---|---|---|---|
+| Corruption augmentation improves robustness to historical dropout | D_A - D_B at 40%: +3.42 [+2.95, +3.92] (3/3 seeds > 0) pp; D_A - D_C: +3.75 [+3.17, +4.37] (3/3 seeds > 0) pp; excess alerts A - B at 40%: +1.71 [+1.45, +1.99] (3/3 seeds > 0) pp | test | Yes | Synthetic missingness on simulated telemetry; clean targets; three seeds |
+| An explicit availability mask improves on augmentation (C better than B) | D_B - D_C at 40%: +0.34 [+0.11, +0.57] (3/3 seeds > 0) pp; trajectory: +0.02 [-0.09, +0.12] (2/3 seeds > 0) pp; excess alerts B - C at 40%: -0.27 [-0.42, -0.11] (0/3 seeds > 0) pp | test | No (rule not met) | Zero fill is itself an exact missingness cue (no natural exact zeros); C seed 33 is an epoch-3 checkpoint |
+| The model warns of failures early (24 h) | A: recall 0.20 ± 0.05 vs chance 0.19 ± 0.00, lift 1.67 ± 0.36x; B: recall 0.06 ± 0.01 vs chance 0.18 ± 0.00, lift 0.32 ± 0.06x; C: recall 0.13 ± 0.01 vs chance 0.19 ± 0.00, lift 0.91 ± 0.09x; 98 eligible episodes | test | No (rule not met) | Score available only after target_end; 6 h resolution; alerts are not diagnoses; few episodes |
+| Surprise flags the onset of pre-failure shifts (secondary 48 h horizon) | A: recall 0.93 ± 0.02 vs chance 0.35 ± 0.01; B: recall 0.60 ± 0.00 vs chance 0.32 ± 0.00; C: recall 0.91 ± 0.04 vs chance 0.35 ± 0.00; median lead 43 h; 97 eligible episodes | test | Only as a secondary, exploratory observation (no frozen claim rule covers 48 h) | Post hoc: the simulator injects a step in the failing component's sensor 48 h before failure; not realistic degradation |
+| SIGReg-trained representations are non-collapsed | Stage 3/4 predefined criteria met by all nine selected checkpoints (effective rank >= 16, every latent std >= 0.1) | validation | Yes, as non-collapse by the predefined criteria | Model C has lower effective rank (25.2, 23.6, 16.7); no physical semantics claimed |

@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+build/
+dist/
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Operating systems
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+# ...except the Model B/C training logs (the only record of those runs)
+!results/stage4_logs/*.log
+
+# Archives (hand-off bundles such as src.zip, results/stage5.zip)
+*.zip
+
+# Datasets: raw downloads and processed tensors (rebuild with notebooks/01_azure_data.ipynb).
+# train_windows.pt alone is ~99 MB, at GitHub's 100 MB per-file limit.
+data/
+
+# Regenerable Stage 5 embeddings (~200 MB): notebook 05 with RESCORE = True rebuilds them from the checkpoints.
+# The per-window scores (results/stage5/per_window_scores.csv.gz) stay tracked as the evaluation record.
+results/stage5/predictions/
+
+# Third-party papers (copyrighted); the reading notes stay tracked
+reading_papers/*.pdf
+
+
+# Files I added
+
+working/
+research/
+meta_data/
+debug/
