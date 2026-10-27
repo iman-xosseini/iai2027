@@ -4,7 +4,7 @@
 
 [![Target venue: IAI 2027](https://img.shields.io/badge/Target-IAI_2027-blue)](https://www.ltu.se/en/research/research-subjects/operation-and-maintenance-engineering/conferences/iai2027)
 
-![Python](https://img.shields.io/badge/Python-PyTorch-3776AB)
+[![PyTorch](https://img.shields.io/badge/Python-PyTorch-3776AB)](https://pytorch.org/)
 
 > **Research status:** The implementation and three-seed, held-out evaluation are complete. This repository documents an IAI 2027 conference study; it does **not** claim that the paper has been accepted or published. The main results concern robustness and responsiveness on **simulated industrial telemetry**.
 
